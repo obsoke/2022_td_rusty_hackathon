@@ -2,6 +2,12 @@
 
 This project aims to explore the current state of full-stack web development using the [Rust programming language](https://www.rust-lang.org/).
 
+## Requirements
+
+These tools should be installed on your system before continuing:
+
+- `sqlite`
+
 ## Getting Started
 
 1. Ensure Rust is on your system by installing [`rustup`](https://rustup.rs/).
@@ -19,7 +25,6 @@ To Do:
 - [ ] Manager
   - [ ] Create a new category for flashcards
   - [ ] Add a new flashcard to the category
-  - [ ] Modify an existing flashcard
 - [ ] Viewer
   - [ ] Start learning with flashcards by selecting a category
   - [ ] Display the "question" portion of the flashcard
