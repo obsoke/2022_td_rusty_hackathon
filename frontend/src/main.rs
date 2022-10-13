@@ -1,6 +1,6 @@
 mod components;
 
-use crate::components::counter::Model;
+use crate::components::counter::Counter;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -18,7 +18,7 @@ fn switch(routes: &Route) -> Html {
         Route::Home => html! {
             <>
                 <h2>{"Home"}</h2>
-                <Model />
+                <Counter />
             </>
         },
         Route::NotFound => html! { <h2>{" 404" }</h2> },
