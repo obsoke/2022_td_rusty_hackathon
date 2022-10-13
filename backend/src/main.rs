@@ -1,4 +1,9 @@
-use axum::{http::StatusCode, response::IntoResponse, routing::post, Json, Router};
+use axum::{
+    http::StatusCode,
+    response::IntoResponse,
+    routing::{get, post},
+    Json, Router,
+};
 use axum_extra::routing::SpaRouter;
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
@@ -8,7 +13,8 @@ async fn main() {
     tracing_subscriber::fmt::init();
 
     let app = Router::new()
-        .route("/users", post(create_user))
+        .route("/api/user", get(test_get_user)) // Test route
+        .route("/api/users", post(create_user))
         .merge(SpaRouter::new("/assets", "../frontend/dist"));
 
     // run app with hyper
@@ -18,6 +24,16 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+}
+
+async fn test_get_user() -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        Json(User {
+            id: 1337,
+            username: "Waltuh".to_string(),
+        }),
+    )
 }
 
 async fn create_user(Json(payload): Json<CreateUser>) -> impl IntoResponse {
