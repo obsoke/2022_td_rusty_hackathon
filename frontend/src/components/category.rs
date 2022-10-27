@@ -3,7 +3,7 @@ use serde::Deserialize;
 use yew::prelude::*;
 use yew::Properties;
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct Flashcard {
     id: i32,
     question: String,
@@ -43,9 +43,20 @@ pub fn category(props: &CategoryProps) -> Html {
         );
     }
 
+
     html! {
         <div>
             <h3>{"Start learning with a card deck!"}</h3>
+            {
+                cards.iter().map(|card| {
+                    html!{ <div class="card">
+                            <div class="question"> {&card.question}</div>
+                            <div class="answer"> {&card.answer}</div>
+                            </div> }
+                }).collect::<Html>()
+            }
+
+
         </div>
     }
 }
