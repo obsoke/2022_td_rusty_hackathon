@@ -1,7 +1,7 @@
 use gloo_net::http::Request;
 use serde::Deserialize;
 use yew::prelude::*;
-use yew::{Properties, Callback};
+use yew::{Callback, Properties};
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct Flashcard {
@@ -46,36 +46,34 @@ pub fn category(props: &CategoryProps) -> Html {
 
     let onclick = {
         let counter = counter.clone();
+        let cards = cards.clone();
         Callback::from(move |_| {
-
-                       let num_cards = &cards.clone().len();
-                       if *num_cards as i32 == *counter  {
-                       counter.set(0)
-                       } else {
-                       counter.set(*counter + 1)
-                       }
-
+            let num_cards = cards.len();
+            if num_cards - 1 == *counter {
+                counter.set(0)
+            } else {
+                counter.set(*counter + 1)
+            }
         })
-
     };
-
 
     html! {
         <div>
             <h3>{"Start learning with a card deck!"}</h3>
             {
-                cards.iter().map(|card| {
-                    html!{ <div class="card">
+                match cards.get(*counter) {
+                    Some(card) => html! {
+                        <div class="card">
                             <div class="question"> {&card.question}</div>
                             <div class="answer"> {&card.answer}</div>
-                            </div> }
-                }).collect::<Html>()
+                        </div>
+                    },
+                    None => html!{},
+                }
             }
 
         <div class="deck-btns">
-            <button {onclick}> { "Next! "  }
-        <span>{*counter} </span>
-        </button>
+            <button {onclick}> { "Next!" }</button>
          </div>
       </div>
     }
