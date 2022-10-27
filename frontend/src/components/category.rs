@@ -59,7 +59,6 @@ pub fn category(props: &CategoryProps) -> Html {
 
     html! {
         <div>
-            <h3>{"Start learning with a card deck!"}</h3>
             {
                 match cards.get(*counter) {
                     Some(card) => html! {
@@ -72,9 +71,9 @@ pub fn category(props: &CategoryProps) -> Html {
                 }
             }
 
-        <div class="deck-btns">
-            <button {onclick}> { "Next!" }</button>
-         </div>
+            <div class="deck-btns">
+                <button {onclick}> { "Next!" }</button>
+            </div>
       </div>
     }
 }
