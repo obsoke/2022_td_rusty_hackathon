@@ -28,14 +28,13 @@ pub fn category(props: &CategoryProps) -> Html {
         use_effect_with_deps(
             move |_| {
                 wasm_bindgen_futures::spawn_local(async move {
-                    let fetched_cards: Vec<Flashcard> =
-                        Request::get(&format!("/api/category/{}", id))
-                            .send()
-                            .await
-                            .unwrap()
-                            .json()
-                            .await
-                            .unwrap();
+                    let fetched_cards: Vec<Flashcard> = Request::get(&format!("/api/card/{}", id))
+                        .send()
+                        .await
+                        .unwrap()
+                        .json()
+                        .await
+                        .unwrap();
                     c.set(fetched_cards);
                 });
                 || ()

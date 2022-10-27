@@ -34,7 +34,7 @@ pub fn app(pool: SqlitePool) -> Router {
         .route("/api/health_check", get(health_check))
         .route("/api/user", get(get_user))
         .route("/api/card/:category", get(get_cards_for_category))
-        .route("/api/card/:category", post(create_card_for_category))
+        .route("/api/category/:category", post(create_card_for_category))
         .route("/api/category", post(create_category))
         .route("/api/category", get(get_categories))
         .merge(SpaRouter::new("/assets", "../frontend/dist"))
