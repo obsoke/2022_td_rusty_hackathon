@@ -1,14 +1,16 @@
 mod components;
 
-use crate::components::counter::Counter;
-use crate::components::fetch_ex::FetchExample;
+use crate::components::category::Category;
+use crate::components::home::Home;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
 #[derive(Clone, Routable, PartialEq)]
-enum Route {
+pub enum Route {
     #[at("/")]
-    Home,
+    HomePage,
+    #[at("/category/:id")]
+    Category { id: String },
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -16,14 +18,13 @@ enum Route {
 
 fn switch(routes: &Route) -> Html {
     match routes {
-        Route::Home => html! {
-            <>
-                <h2>{"Home"}</h2>
-                <Counter />
-                <FetchExample />
-            </>
+        Route::HomePage => html! {
+            <Home />
         },
-        Route::NotFound => html! { <h2>{" 404" }</h2> },
+        Route::Category { id } => html! {
+            <Category id={id.to_owned()} />
+        },
+        Route::NotFound => html! { <h3>{ "Page not found" }</h3> },
     }
 }
 
@@ -31,7 +32,8 @@ fn switch(routes: &Route) -> Html {
 fn app() -> Html {
     html! {
         <BrowserRouter>
-            <h1>{ "Cool App" }</h1>
+            <h1>{ "Flashcarder" }</h1>
+            <h2>{ "Learn some things!" }</h2>
             <Switch<Route> render={Switch::render(switch)} />
         </BrowserRouter>
     }

@@ -1,2 +1,2 @@
-pub mod counter;
-pub mod fetch_ex;
+pub mod category;
+pub mod home;
