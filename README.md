@@ -25,11 +25,11 @@ To Do:
 - [ ] Manager
   - [ ] Create a new category for flashcards
   - [ ] Add a new flashcard to the category
-- [ ] Viewer
-  - [ ] Start learning with flashcards by selecting a category
-  - [ ] Display the "question" portion of the flashcard
-  - [ ] Display the "answer" portion of the flashcard upon button click
-  - [ ] Click a button to view the next card
+- [X] Viewer
+  - [X] Start learning with flashcards by selecting a category
+  - [X] Display the "question" portion of the flashcard
+  - [X] Display the "answer" portion of the flashcard upon button click
+  - [X] Click a button to view the next card
   
   
   
