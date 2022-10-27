@@ -32,7 +32,7 @@ fn switch(routes: &Route) -> Html {
 fn app() -> Html {
     html! {
         <BrowserRouter>
-            <h1 class="h-liners">{ "Flashcarder" }</h1>
+            <h1 class="h-liners"><Link<Route> to={Route::HomePage}>{ "Flashcarder" }</Link<Route>></h1>
             <h2>{ "Learn some things!" }</h2>
             <Switch<Route> render={Switch::render(switch)} />
         </BrowserRouter>
