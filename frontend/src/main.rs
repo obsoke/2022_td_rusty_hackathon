@@ -20,7 +20,6 @@ fn switch(routes: &Route) -> Html {
             <>
                 <h2>{"Home"}</h2>
                 <Counter />
-                <br />
                 <FetchExample />
             </>
         },
