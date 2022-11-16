@@ -26,3 +26,4 @@ sqlx = { version = "0.6.2", features = ["runtime-tokio-native-tls", "sqlite"] }
 time = "0.3.15"
 tower = "0.4.13"
 hyper = { version = "0.14.20", features = ["full"] }
+config = "0.13.2"

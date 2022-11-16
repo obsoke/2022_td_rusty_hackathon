@@ -31,6 +31,10 @@ To Do:
   - [X] Display the "answer" portion of the flashcard upon button click
   - [X] Click a button to view the next card
   
-  
-  
-  
+## Retro
+
+There were a few challenges in writing this app fully in Rust.
+
+### Sharing types
+
+I wanted to put my types in a central place in order to share them between the frontend and backend. This worked on the backend for the most part, as the environment was simple. However, when trying to use this `types` crate on the frontend, I ran into issues compiling dependencies into WebAssembly.
