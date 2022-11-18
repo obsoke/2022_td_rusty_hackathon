@@ -32,12 +32,16 @@ pub async fn get_categories(Extension(pool): Extension<SqlitePool>) -> impl Into
     let mut conn = pool
         .acquire()
         .await
-        .expect("Could not acqure DB connection");
+        .expect(r#"Could not acqure DB connection"#);
 
-    let rows = sqlx::query_as::<_, Category>("SELECT * FROM categories")
+    match sqlx::query_as::<_, Category>("SELECT * FROM categories")
         .fetch_all(&mut conn)
         .await
-        .unwrap();
-
-    (StatusCode::OK, Json(rows))
+    {
+        Ok(rows) => (StatusCode::OK, Json(rows)),
+        Err(e) => {
+            println!("Failed to execute query: {e}");
+            (StatusCode::INTERNAL_SERVER_ERROR, Json::default())
+        }
+    }
 }

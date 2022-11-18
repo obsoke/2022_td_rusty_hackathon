@@ -8,21 +8,15 @@ use hyper::server::conn::AddrIncoming;
 use sqlx::sqlite::SqlitePool;
 use std::net::TcpListener;
 
-use crate::{config::Settings, routes::*};
+use crate::routes::*;
 
-const SQLITE_DB_URL: &'static str = "sqlite:cards.db";
 pub type Server = hyper::server::Server<AddrIncoming, IntoMakeService<Router>>;
 
-pub async fn run(listener: TcpListener, settings: &Settings) -> Result<Server, hyper::Error> {
+pub async fn run(listener: TcpListener, db_pool: SqlitePool) -> Result<Server, hyper::Error> {
     // tracing_subscriber::fmt::init(); // TODO: Re-enable when it doesn't cause issues in tests
 
-    // set up sqlite & run all migrations
-    let pool = create_sqlite(Some(&settings.database_connection_string), true)
-        .await
-        .unwrap();
-
     // run app with hyper
-    let server = axum::Server::from_tcp(listener)?.serve(app(pool).into_make_service());
+    let server = axum::Server::from_tcp(listener)?.serve(app(db_pool).into_make_service());
 
     Ok(server)
 }
@@ -40,15 +34,10 @@ pub fn app(pool: SqlitePool) -> Router {
 }
 
 pub async fn create_sqlite(
-    connection_string: Option<&str>,
+    connection_string: &str,
     run_migrations: bool,
 ) -> Result<SqlitePool, ()> {
-    let conn_str = if connection_string.is_some() {
-        connection_string.unwrap()
-    } else {
-        SQLITE_DB_URL
-    };
-    let pool = SqlitePool::connect(conn_str)
+    let pool = SqlitePool::connect(connection_string)
         .await
         .expect("Unable to connect to SQLite");
 
