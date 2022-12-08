@@ -1,5 +1,5 @@
 use axum::{
-    extract::{Extension, Path},
+    extract::{Path, State},
     http::StatusCode,
     response::IntoResponse,
     Json,
@@ -10,7 +10,7 @@ use sqlx::sqlite::SqlitePool;
 use types::Flashcard;
 
 pub async fn get_cards_for_category(
-    Extension(pool): Extension<SqlitePool>,
+    State(pool): State<SqlitePool>,
     Path(category): Path<i32>,
 ) -> impl IntoResponse {
     let mut conn = pool
@@ -34,7 +34,7 @@ pub struct CreateCardForCategory {
 }
 
 pub async fn create_card_for_category(
-    Extension(pool): Extension<SqlitePool>,
+    State(pool): State<SqlitePool>,
     Path(category): Path<i32>,
     Json(payload): Json<CreateCardForCategory>,
 ) -> impl IntoResponse {

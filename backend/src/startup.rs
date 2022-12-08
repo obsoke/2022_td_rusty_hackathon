@@ -1,5 +1,4 @@
 use axum::{
-    extract::Extension,
     routing::{get, post},
     {routing::IntoMakeService, Router},
 };
@@ -30,7 +29,7 @@ pub fn app(pool: SqlitePool) -> Router {
         .route("/api/category", get(get_categories))
         .merge(SpaRouter::new("/assets", "../frontend/dist"))
         // Give all routes access to SQLite DB pool
-        .layer(Extension(pool))
+        .with_state(pool)
 }
 
 pub async fn create_sqlite(

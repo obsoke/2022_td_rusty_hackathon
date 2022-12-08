@@ -1,12 +1,8 @@
 use axum::{body::Body, http::Request};
-use sqlx::{Connection, SqliteConnection, SqlitePool};
+use sqlx::SqlitePool;
 use std::net::TcpListener;
 
-use backend::{
-    config::{get_configuration, Settings},
-    routes::CreateCategory,
-    startup::create_sqlite,
-};
+use backend::{routes::CreateCategory, startup::create_sqlite};
 
 #[tokio::test]
 async fn health_check_works_via_server() {

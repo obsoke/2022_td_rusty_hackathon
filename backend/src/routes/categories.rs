@@ -1,4 +1,4 @@
-use axum::{extract::Extension, http::StatusCode, response::IntoResponse, Json};
+use axum::{extract::State, http::StatusCode, response::IntoResponse, Json};
 use serde::Deserialize;
 use sqlx::sqlite::SqlitePool;
 
@@ -10,7 +10,7 @@ pub struct CreateCategory {
 }
 
 pub async fn create_category(
-    Extension(pool): Extension<SqlitePool>,
+    State(pool): State<SqlitePool>,
     Json(payload): Json<CreateCategory>,
 ) -> impl IntoResponse {
     let mut conn = pool
@@ -28,7 +28,7 @@ pub async fn create_category(
     (StatusCode::CREATED, Json(category_id))
 }
 
-pub async fn get_categories(Extension(pool): Extension<SqlitePool>) -> impl IntoResponse {
+pub async fn get_categories(State(pool): State<SqlitePool>) -> impl IntoResponse {
     let mut conn = pool
         .acquire()
         .await

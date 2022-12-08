@@ -5,7 +5,7 @@ use crate::components::home::Home;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-#[derive(Clone, Routable, PartialEq)]
+#[derive(Clone, Routable, PartialEq, Eq)]
 pub enum Route {
     #[at("/")]
     HomePage,
@@ -16,29 +16,29 @@ pub enum Route {
     NotFound,
 }
 
-fn switch(routes: &Route) -> Html {
+fn switch(routes: Route) -> Html {
     match routes {
         Route::HomePage => html! {
             <Home />
         },
         Route::Category { id } => html! {
-            <Category id={id.to_owned()} />
+            <Category id={id} />
         },
         Route::NotFound => html! { <h3>{ "Page not found" }</h3> },
     }
 }
 
-#[function_component(Main)]
-fn app() -> Html {
+#[function_component]
+fn App() -> Html {
     html! {
         <BrowserRouter>
             <h1 class="h-liners"><Link<Route> to={Route::HomePage}>{ "Flashcarder" }</Link<Route>></h1>
             <h2>{ "Learn some things!" }</h2>
-            <Switch<Route> render={Switch::render(switch)} />
+            <Switch<Route> render={switch} />
         </BrowserRouter>
     }
 }
 
 fn main() {
-    yew::start_app::<Main>();
+    yew::Renderer::<App>::new().render();
 }

@@ -5,13 +5,13 @@ use yew::{Callback, Properties};
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct Flashcard {
-    id: i32,
+    _id: i32,
     question: String,
     answer: String,
-    category: i32,
+    _category: i32,
 }
 
-#[derive(Properties, PartialEq)]
+#[derive(Properties, PartialEq, Eq)]
 pub struct CategoryProps {
     pub id: String,
 }
