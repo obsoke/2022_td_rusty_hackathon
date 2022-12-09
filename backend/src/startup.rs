@@ -6,14 +6,14 @@ use axum_extra::routing::SpaRouter;
 use hyper::server::conn::AddrIncoming;
 use sqlx::sqlite::SqlitePool;
 use std::net::TcpListener;
+use tower::ServiceBuilder;
+use tower_http::trace::TraceLayer;
 
 use crate::routes::*;
 
 pub type Server = hyper::server::Server<AddrIncoming, IntoMakeService<Router>>;
 
 pub async fn run(listener: TcpListener, db_pool: SqlitePool) -> Result<Server, hyper::Error> {
-    // tracing_subscriber::fmt::init(); // TODO: Re-enable when it doesn't cause issues in tests
-
     // run app with hyper
     let server = axum::Server::from_tcp(listener)?.serve(app(db_pool).into_make_service());
 
@@ -30,6 +30,7 @@ pub fn app(pool: SqlitePool) -> Router {
         .merge(SpaRouter::new("/assets", "../frontend/dist"))
         // Give all routes access to SQLite DB pool
         .with_state(pool)
+        .layer(ServiceBuilder::new().layer(TraceLayer::new_for_http()))
 }
 
 pub async fn create_sqlite(

@@ -1,6 +1,7 @@
 use axum::{extract::State, http::StatusCode, response::IntoResponse, Json};
 use serde::Deserialize;
 use sqlx::sqlite::SqlitePool;
+use uuid::Uuid;
 
 use types::Category;
 
@@ -9,23 +10,44 @@ pub struct CreateCategory {
     pub name: String,
 }
 
+#[tracing::instrument(
+    name = "Creating a new category",
+    skip(pool, payload),
+    fields(
+        request_id = %Uuid::new_v4(),
+        category_name = %payload.name
+    )
+)]
 pub async fn create_category(
     State(pool): State<SqlitePool>,
     Json(payload): Json<CreateCategory>,
 ) -> impl IntoResponse {
+    match insert_category(&pool, &payload).await {
+        Ok(_) => StatusCode::CREATED,
+        Err(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    }
+}
+
+#[tracing::instrument(name = "Saving new category to the database", skip(pool, payload))]
+pub async fn insert_category(
+    pool: &SqlitePool,
+    payload: &CreateCategory,
+) -> Result<(), sqlx::Error> {
     let mut conn = pool
         .acquire()
         .await
         .expect("Could not acqure DB connection");
 
-    let category_id = sqlx::query("INSERT INTO categories (name) VALUES (?)")
-        .bind(payload.name)
+    sqlx::query("INSERT INTO categories (name) VALUES (?)")
+        .bind(&payload.name)
         .execute(&mut conn)
         .await
-        .expect("Unable to create new category")
-        .last_insert_rowid();
+        .map_err(|e| {
+            tracing::error!("Failed to e");
+            e
+        })?;
 
-    (StatusCode::CREATED, Json(category_id))
+    Ok(())
 }
 
 pub async fn get_categories(State(pool): State<SqlitePool>) -> impl IntoResponse {
