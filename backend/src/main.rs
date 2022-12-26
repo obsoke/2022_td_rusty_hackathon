@@ -10,7 +10,7 @@ async fn main() -> Result<(), hyper::Error> {
     init_subscriber(subscriber);
 
     let config = get_configuration().expect("Failed to read config");
-    let address = format!("127.0.0.1:{}", config.application_port);
+    let address = format!("{}:{}", config.application.host, config.application.port);
     let listener = TcpListener::bind(address).expect("Could not bind address for server");
 
     let pool = create_sqlite(&config.database_connection_string, true)
