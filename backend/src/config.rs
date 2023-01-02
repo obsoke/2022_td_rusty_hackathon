@@ -1,16 +1,26 @@
-use serde_aux::field_attributes::deserialize_number_from_string;
+use std::str::FromStr;
 
-#[derive(serde::Deserialize)]
+use serde_aux::field_attributes::deserialize_number_from_string;
+use sqlx::sqlite::SqliteConnectOptions;
+
+#[derive(serde::Deserialize, Clone)]
 pub struct Settings {
     pub database_connection_string: String,
     pub application: ApplicationSettings,
 }
 
-#[derive(serde::Deserialize)]
+impl Settings {
+    pub fn get_database_settings(&self) -> Result<SqliteConnectOptions, sqlx::Error> {
+        SqliteConnectOptions::from_str(&self.database_connection_string)
+    }
+}
+
+#[derive(serde::Deserialize, Clone)]
 pub struct ApplicationSettings {
     #[serde(deserialize_with = "deserialize_number_from_string")]
     pub port: u16,
     pub host: String,
+    pub run_migrations: bool,
 }
 
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
